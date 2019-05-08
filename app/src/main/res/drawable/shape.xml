@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--填充背景色 -->
+    <solid android:color="#ff6f6c"/>
+    <!-- 设置弧度  Radius设置所有角的弧度 -->
+    <corners
+        android:radius="50dp"/>
+    <!--内容与边框的间距-->
+    <padding
+        android:bottom="15dp"
+        android:left="15dp"
+        android:right="15dp"
+        android:top="15dp" />
+</shape>
