@@ -1,6 +1,8 @@
 package com.example.filetradeapp;
 
 import com.example.filetradeapp.Util.Bean.FileBean;
+import com.example.filetradeapp.Util.Bean.LoginBean;
+import com.example.filetradeapp.Util.Bean.RegisterBean;
 import com.example.filetradeapp.Util.Bean.UserBean;
 
 import io.reactivex.Observable;
@@ -8,15 +10,30 @@ import retrofit2.Response;
 
 public interface Contract {
 
+
+    //登录
+    interface ILoginView {
+        void onLoginCall(LoginBean.ResResultBean bean);
+    }
+    interface ILoginModel {
+        void doLogin(String username, String password);
+    }
+    interface ILoginPresenter {
+        void doLogin(String username, String password);
+    }
+
+
     //注册
     interface IRegisterView {
-        void onRegister(boolean bool);
+        void onRegisterResult(RegisterBean.ResResultBean resResultBean);
     }
+
     interface IRegisterModel {
-        Observable<Response<UserBean>> doRegister(String username, String password);
+        void doRegister(String username, String password, String phone, String email, int sex);
     }
+
     interface IRegisterPresenter {
-        void doRegister(String username, String password);
+        void doRegister(String username, String password, String phone, String email, int sex);
     }
 
     //上传
