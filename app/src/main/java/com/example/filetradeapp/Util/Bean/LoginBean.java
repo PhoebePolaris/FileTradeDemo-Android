@@ -107,10 +107,7 @@ public class LoginBean {
 
             private String userId;
             private String username;
-            private int sex;
             private String phone;
-            private String email;
-            private Object avatar;
 
             public String getUserId() {
                 return userId;
@@ -128,13 +125,6 @@ public class LoginBean {
                 this.username = username;
             }
 
-            public int getSex() {
-                return sex;
-            }
-
-            public void setSex(int sex) {
-                this.sex = sex;
-            }
 
             public String getPhone() {
                 return phone;
@@ -144,21 +134,6 @@ public class LoginBean {
                 this.phone = phone;
             }
 
-            public String getEmail() {
-                return email;
-            }
-
-            public void setEmail(String email) {
-                this.email = email;
-            }
-
-            public Object getAvatar() {
-                return avatar;
-            }
-
-            public void setAvatar(Object avatar) {
-                this.avatar = avatar;
-            }
         }
     }
 }

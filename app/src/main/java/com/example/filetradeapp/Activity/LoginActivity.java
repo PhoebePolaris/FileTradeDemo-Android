@@ -33,13 +33,6 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
     private static Toolbar toolbar;
     private static TextView toolbarTitle;
 
-
-    et_phonenum = (EditText) findViewById(R.id.et_phonenum);
-    et_psw = (EditText) findViewById(R.id.et_psw);
-    btn_login = (Button) findViewById(R.id.btn_login);
-    tv_register = (TextView) findViewById(R.id.tv_register);
-    tv_find_psw = (TextView) findViewById(R.id.tv_find_psw);
-
     private String phonenum, psw, spPsw;//获取的手机号，密码，加密密码
 
     private static LoginPresenterImpl presenter = new LoginPresenterImpl();
@@ -64,6 +57,12 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
     }
 
     private void init() {
+
+        et_phonenum = (EditText) findViewById(R.id.et_phonenum);
+        et_psw = (EditText) findViewById(R.id.et_psw);
+        btn_login = (Button) findViewById(R.id.btn_login);
+        tv_register = (TextView) findViewById(R.id.tv_register);
+        tv_find_psw = (TextView) findViewById(R.id.tv_find_psw);
 
         //立即注册控件的点击事件
         tv_register.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +160,7 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
     }
 
     @Override
-    public void onLoginCall(LoginBean.ResResultBean bean) {
+    public void onLogin(LoginBean.ResResultBean bean) {
          if (bean.isIsSuccess()) {
              //一致登录成功
              Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
@@ -190,11 +189,7 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
          }
     }
 
-    @Override
-    public void onLogin(boolean bool) {
-        //if(bool) Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
-        //else Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
-    }
+
 }
 
 

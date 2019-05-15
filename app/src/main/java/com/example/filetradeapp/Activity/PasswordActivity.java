@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.filetradeapp.R;
 
 
 public class PasswordActivity extends AppCompatActivity {

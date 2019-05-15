@@ -13,7 +13,7 @@ public interface Contract {
 
     //登录
     interface ILoginView {
-        void onLoginCall(LoginBean.ResResultBean bean);
+        void onLogin(LoginBean.ResResultBean bean);
     }
     interface ILoginModel {
         void doLogin(String username, String password);
@@ -25,15 +25,15 @@ public interface Contract {
 
     //注册
     interface IRegisterView {
-        void onRegisterResult(RegisterBean.ResResultBean resResultBean);
+        void onRegister(RegisterBean.ResResultBean resResultBean);
     }
 
     interface IRegisterModel {
-        void doRegister(String username, String password, String phone, String email, int sex);
+        void doRegister(String username, String password, String phone);
     }
 
     interface IRegisterPresenter {
-        void doRegister(String username, String password, String phone, String email, int sex);
+        void doRegister(String username, String password, String phone);
     }
 
     //上传

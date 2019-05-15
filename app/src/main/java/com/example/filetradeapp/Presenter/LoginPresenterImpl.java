@@ -2,35 +2,52 @@ package com.example.filetradeapp.Presenter;
 
 
 import com.example.filetradeapp.Contract;
+import com.example.filetradeapp.Model.DownloadModelImpl;
 import com.example.filetradeapp.Model.LoginModelImpl;
+import com.example.filetradeapp.Util.Bean.FileBean;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class LoginPresenterImpl implements Contract.ILoginPresenter {
-
-    //Model
     private LoginModelImpl model;
-    //View
-    private Contract.ILoginView loginView;
+    private Contract.ILoginView view;
 
     public LoginPresenterImpl() {
         model = new LoginModelImpl();
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
     }
 
     public void attachView(Contract.ILoginView view) {
-        loginView = view;
+        this.view = view;
     }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoginCall(LoginEvent loginEvent) {
-        //处理登录结果
-        loginView.onLoginCall(loginEvent.getResult());
-    }
-
 
     @Override
     public void doLogin(String username, String password) {
-        model.doLogin(username, password);
+        model.doLogin(username, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<FileBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Response<FileBean> result) {
+                        view.onLogin(result.isSuccessful());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
 }
