@@ -1,5 +1,7 @@
 package com.example.filetradeapp;
 
+import android.content.Context;
+
 import com.example.filetradeapp.Activity.Entity.FileCard;
 
 import java.util.LinkedList;
@@ -10,9 +12,11 @@ public class Config {
 
     public static String username;
 
-    public static String userId;
+    public static String uid;
 
     public static int credit;
+
+    public static String baseURL = "http://192.168.191.1:8080/";
 
     public static List<FileCard> getTestList(){
         List<FileCard> list = new LinkedList<>();
