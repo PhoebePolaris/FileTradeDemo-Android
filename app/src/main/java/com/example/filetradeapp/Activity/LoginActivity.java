@@ -175,9 +175,7 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
              setResult(RESULT_OK, data);
              Config.username = bean.getCurData().getUsername();
              Config.userId = bean.getCurData().getUserId();
-             Config.email = bean.getCurData().getEmail();
              Config.phone = bean.getCurData().getPhone();
-             Config.sex = bean.getCurData().getSex();
              //销毁登录界面
              LoginActivity.this.finish();
              //跳转到主界面，登录成功的状态传递到 MainActivity 中

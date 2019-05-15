@@ -12,9 +12,7 @@ public class Config {
 
     public static String username;
     public static String userId;
-    public static String email;
     public static String phone;
-    public static int sex;
 
     public static String uid;
 

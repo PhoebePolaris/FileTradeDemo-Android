@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
                     Toast.makeText(RegisterActivity.this, "此手机号已经存在", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    presenter.doRegister(userName, psw, phoneNumber, "12345679@126.com", 1);
+                    presenter.doRegister(userName, psw, phoneNumber);
                 }
             }
         });
@@ -146,15 +146,13 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
     }
 
     @Override
-    public void onRegisterResult(RegisterBean.ResResultBean resResultBean) {
+    public void onRegister(RegisterBean.ResResultBean resResultBean) {
         //这里写处理注册结果的逻辑
         //具体参考RegisterBean文件
         if (resResultBean.isIsSuccess()) {
             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
             String userId = resResultBean.getCurData().getUserId(),
-                phoneNumber = resResultBean.getCurData().getPhone(),
-                email = resResultBean.getCurData().getEmail();
-            int sex = resResultBean.getCurData().getSex();
+                phoneNumber = resResultBean.getCurData().getPhone();
             Intent intent = new Intent();
             intent.putExtra("username", userName);
             setResult(1, intent);
