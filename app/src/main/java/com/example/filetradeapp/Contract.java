@@ -1,12 +1,26 @@
 package com.example.filetradeapp;
 
+import android.app.Activity;
+
 import com.example.filetradeapp.Util.Bean.FileBean;
 import com.example.filetradeapp.Util.Bean.UserBean;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public interface Contract {
+
+    //登录
+    interface ILoginView {
+        void onLogin(boolean bool);
+    }
+    interface ILoginModel {
+        Observable<Response<UserBean>> doRegister(String username, String password);
+    }
+    interface ILoginPresenter {
+        void doLogin(String username, String password);
+    }
 
     //注册
     interface IRegisterView {
@@ -35,9 +49,9 @@ public interface Contract {
         void onDownload(boolean bool);
     }
     interface IDownloadModel {
-        Observable<Response<FileBean>> doDownload(String url, String filePath);
+        Observable<ResponseBody> doDownload(String url);
     }
     interface IDownloadPresenter {
-        void doDownload(String url, String filePath);
+        void doDownload(String url, String path, Activity context);
     }
 }
