@@ -1,6 +1,9 @@
 package com.example.filetradeapp.Activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -16,12 +19,24 @@ import android.widget.Toast;
 import com.example.filetradeapp.Activity.Fragment.NavCollectionFragment;
 import com.example.filetradeapp.Activity.Fragment.NavHomeFragment;
 import com.example.filetradeapp.Activity.Fragment.NavUserFragment;
+import com.example.filetradeapp.Config;
+import com.example.filetradeapp.Contract;
+import com.example.filetradeapp.Presenter.DownloadPresenterImpl;
+import com.example.filetradeapp.Presenter.UploadPresenterImpl;
 import com.example.filetradeapp.R;
+import com.example.filetradeapp.Util.IO.FileUtils;
+import com.example.filetradeapp.Util.IO.PermissionUtil;
+import com.example.filetradeapp.Util.IO.ServiceManager;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
-public class MenuActivity extends AppCompatActivity {
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+
+public class MenuActivity extends AppCompatActivity implements Contract.IUploadView,Contract.IDownloadView {
 
     private static Toolbar toolbar;
     private static TextView toolbarTitle;
@@ -41,7 +56,8 @@ public class MenuActivity extends AppCompatActivity {
     private boolean isExit=false;
     private static String path;
 
-    //private static MenuPresenterImpl presenter = new MenuPresenterImpl();
+    //private static UploadPresenterImpl presenter = new UploadPresenterImpl();
+    private static DownloadPresenterImpl presenter = new DownloadPresenterImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +65,9 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         setToolbar();
 
-        //presenter.attachView(this);
+        ServiceManager.init();
+        presenter.attachView(this);
+
         toolbarTitle.setText("主页");
         homeFragment = new NavHomeFragment();
         fragmentManager = getSupportFragmentManager();
@@ -77,7 +95,13 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.add){
             //上传文件
-            Toast.makeText(this, "上传文件", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.setType("*/*");
+//            intent.addCategory(Intent.CATEGORY_OPENABLE);
+//            startActivityForResult(intent,1);
+            presenter.doDownload("file/download/c82f0b5351df48f3a0e9b9f42bb246b9.jpg",Config.storageURL + "/title.jpg",this);
+            Toast.makeText(this, "文件下载中", Toast.LENGTH_SHORT).show();
+            return true;
         }
         return false;
     }
@@ -155,5 +179,40 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(resultCode==RESULT_OK){
+            switch(requestCode){
+                case 1:
+                    Uri uri=data.getData();
+                    String filePath;
+                    if (uri != null) {
+                        filePath = FileUtils.getFilePathByUri(this,uri);
+
+                        String title = "test";
+                        int credit = 0;
+                        //presenter.doUpload(Config.uid,UUID.randomUUID().toString().replaceAll("-", ""),filePath,title,credit);
+                        Toast.makeText(this, "文件上传中", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onUpload(boolean bool) {
+        if(bool) Toast.makeText(this, "文件上传成功", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "文件上传失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDownload(boolean bool) {
+        Looper.prepare();
+        if(bool) Toast.makeText(getApplicationContext(), "文件下载成功", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(getApplicationContext(), "文件下载失败", Toast.LENGTH_SHORT).show();
+        Looper.loop();
     }
 }
