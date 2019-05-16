@@ -1,14 +1,23 @@
 package com.example.filetradeapp.Presenter;
 
+import android.app.Activity;
+import android.os.Environment;
+
 import com.example.filetradeapp.Contract;
 import com.example.filetradeapp.Model.DownloadModelImpl;
 import com.example.filetradeapp.Util.Bean.FileBean;
+import com.example.filetradeapp.Util.IO.FileUtils;
+
+import java.io.File;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
+
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 public class DownloadPresenterImpl implements Contract.IDownloadPresenter {
 
@@ -24,18 +33,24 @@ public class DownloadPresenterImpl implements Contract.IDownloadPresenter {
     }
 
     @Override
-    public void doDownload(String url, String filePath) {
-        model.doDownload(url,filePath)
+    public void doDownload(String url, final String path, final Activity context) {
+        model.doDownload(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<FileBean>>() {
+                .subscribe(new Observer<ResponseBody>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(Response<FileBean> result) {
-                        view.onDownload(result.isSuccessful());
+                    public void onNext(final ResponseBody result) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                boolean bool = FileUtils.writeResponseBodyToDisk(context,path,result);
+                                view.onDownload(bool);
+                            }
+                        }).start();
                     }
 
                     @Override
