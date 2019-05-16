@@ -32,7 +32,7 @@ public class NavUserFragment extends Fragment {
 
         TextView tx = (TextView)view.findViewById(R.id.textView);
         tx.setText(Config.username);
-        LinearLayout my_import=(LinearLayout)view.findViewById(R.id.my_source);
+        /*LinearLayout my_import=(LinearLayout)view.findViewById(R.id.my_source);
         my_import.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +40,7 @@ public class NavUserFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        */
         LinearLayout my_favor=(LinearLayout)view.findViewById(R.id.my_collection);
         my_favor.setOnClickListener(new View.OnClickListener() {
             @Override

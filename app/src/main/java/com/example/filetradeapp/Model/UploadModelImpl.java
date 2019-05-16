@@ -6,7 +6,10 @@ import com.example.filetradeapp.Util.IO.ServiceManager;
 import com.google.gson.JsonObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MediaType;
@@ -23,19 +26,21 @@ public class UploadModelImpl implements Contract.IUploadModel {
         String filename = file.getName();
         String suffixName = filename.substring(filename.lastIndexOf(".")+1);
 
+        SimpleDateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         JsonObject json = new JsonObject();
         json.addProperty("file_id",fid);
         json.addProperty("size",0);
         json.addProperty("file_title",title);
-        json.addProperty("creation_time",new Date().toString());
+        json.addProperty("creation_time",dateTime.format(new Date()));
         json.addProperty("file_type",suffixName);
         json.addProperty("credit",credit);
         json.addProperty("creator_id",uid);
         json.addProperty("score",0);
-        RequestBody reqJson = RequestBody.create(MediaType.parse("application/json"),json.toString());
+        Map<String,JsonObject> map = new HashMap<>();
+        map.put("json",json);
 
         RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"),file);
         MultipartBody.Part part= MultipartBody.Part.createFormData("file", fid, reqFile);
-        return ServiceManager.getRequest().requestUpload(reqJson,part);
+        return ServiceManager.getRequest().requestUpload(map,part);
     }
 }

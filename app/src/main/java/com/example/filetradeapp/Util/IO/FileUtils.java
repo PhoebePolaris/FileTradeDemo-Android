@@ -11,6 +11,14 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import okhttp3.ResponseBody;
+
 public final class FileUtils {
 
     public static String getFilePathByUri(Activity context, Uri uri) {
@@ -106,6 +114,49 @@ public final class FileUtils {
 
     private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean  writeResponseBodyToDisk(Activity context, String path, ResponseBody body) {
+
+        PermissionUtil.verifyStoragePermissions(context);
+
+        File file = new File(path);
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            byte[] fileReader = new byte[2048];
+            //long fileSize = body.contentLength();
+            //long fileSizeDownloaded = 0;
+            inputStream = body.byteStream();
+            outputStream = new FileOutputStream(file);
+            while (true) {
+                int read = inputStream.read(fileReader);
+                if (read == -1) {
+                    break;
+                }
+                outputStream.write(fileReader, 0, read);
+                //fileSizeDownloaded += read;
+            }
+            outputStream.flush();
+            return true;
+        } catch (IOException e) {
+            return false;
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

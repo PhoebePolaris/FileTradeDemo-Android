@@ -1,28 +1,15 @@
 package com.example.filetradeapp.Util.Bean;
 
-import java.util.Date;
-
 public class FileBean {
 
     private String uid;
     private String fid;
-    private double size;
+    private String size;
     private String title;
     private String type;
-    private Date time;
+    private String time;
     private int credit;
     private double score;
-
-    public FileBean(String uid, String fid, double size, String title, String type, Date time, int credit, double score){
-        this.uid = uid;
-        this.fid= fid;
-        this.credit = credit;
-        this.score = score;
-        this.size = size;
-        this.time = time;
-        this.title = title;
-        this.type = type;
-    }
 
     public void setFid(String fid) {
         this.fid = fid;
@@ -52,7 +39,7 @@ public class FileBean {
         return title;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
@@ -60,7 +47,7 @@ public class FileBean {
         return score;
     }
 
-    public double getSize() {
+    public String getSize() {
         return size;
     }
 
@@ -72,11 +59,11 @@ public class FileBean {
         this.score = score;
     }
 
-    public void setSize(double size) {
+    public void setSize(String size) {
         this.size = size;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
