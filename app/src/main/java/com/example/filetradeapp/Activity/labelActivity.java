@@ -16,6 +16,7 @@ import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class labelActivity extends AppCompatActivity {
     private TagFlowLayout flowLayout0;
@@ -27,7 +28,10 @@ public class labelActivity extends AppCompatActivity {
     private ArrayList<String> item1 = new ArrayList<>();
     private ArrayList<String> item2 = new ArrayList<>();
     private ArrayList<String> item3 = new ArrayList<>();
-
+    private List<String> tags0 = new ArrayList<>();
+    private List<String> tags1 = new ArrayList<>();
+    private List<String> tags2 = new ArrayList<>();
+    private List<String> tags3 = new ArrayList<>();
     private TagAdapter<String> mAdapterFive;
     private TextView tv0;
     private TextView tv1;
@@ -107,13 +111,11 @@ public class labelActivity extends AppCompatActivity {
             }
         });
 
-
         //监听
         flowLayout0.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                Toast.makeText(labelActivity.this, item0.get(position), Toast.LENGTH_SHORT).show();
-
+                tags0.add(item0.get(position));
                 return true;
             }
         });
@@ -121,31 +123,27 @@ public class labelActivity extends AppCompatActivity {
         flowLayout1.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                Toast.makeText(labelActivity.this, item1.get(position), Toast.LENGTH_SHORT).show();
 
-
+                tags1.add(item1.get(position));
                 return true;
             }
         });
         flowLayout2.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-
+                tags2.add(item2.get(position));
                 return true;
             }
         });
         flowLayout3.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-
-
+                tags3.add(item3.get(position));
                 return true;
             }
         });
 
-        //String[] labelString = new String[n];
-
-        btn.setOnClickListener(new View.OnClickListener() {
+     btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(labelActivity.this,NavHomeFragment.class);
