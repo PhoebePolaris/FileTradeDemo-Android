@@ -11,20 +11,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.filetradeapp.Activity.Adapter.FileCardRecyclerAdapter;
-import com.example.filetradeapp.Activity.Entity.FileCard;
 import com.example.filetradeapp.Config;
+import com.example.filetradeapp.Contract;
+import com.example.filetradeapp.Presenter.SearchPresenterImpl;
 import com.example.filetradeapp.R;
+import com.example.filetradeapp.Util.Bean.FileBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavHomeFragment extends Fragment {
+public class NavHomeFragment extends Fragment implements Contract.ISearchView{
 
     private View view;
-    //private static NavMenuPresenterImpl presenter = new NavMenuPresenterImpl();
+    private static SearchPresenterImpl presenter = new SearchPresenterImpl();
 
-    //private List<FileCard> cardList = new ArrayList<>();
-    private List<FileCard> cardList = Config.getTestList();
+    private List<FileBean> cardList = new ArrayList<>();
     private FileCardRecyclerAdapter recyclerAdapter = new FileCardRecyclerAdapter(cardList);
     private RecyclerView recyclerView;
 
@@ -32,7 +33,8 @@ public class NavHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_home, container,false);
 
-        //presenter.attachView(this);
+        presenter.attachView(this);
+        presenter.doRecommend();
 
         SearchView searchView =(SearchView)view.findViewById(R.id.search);
         SearchView.SearchAutoComplete text = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
@@ -42,7 +44,7 @@ public class NavHomeFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //presenter.doSearchGroup(query);
+                presenter.doSearch(query);
                 return true;
             }
 
@@ -59,22 +61,34 @@ public class NavHomeFragment extends Fragment {
         return view;
     }
 
-//    public static NavMenuPresenterImpl getPresenter(){
-//        return presenter;
-//    }
+    @Override
+    public void onSearch(List<FileBean> list) {
+        if(list!=null){
+            cardList = list;
+            recyclerAdapter.resetCardList(cardList);
+        }
+        else {
+            Toast.makeText(getContext(), "获得列表失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<>();
+            recyclerAdapter.resetCardList(cardList);
+        }
+    }
 
-//    @Override
-//    public void onGroupSearchResult(String status) {
-//        if(status.equals("success")){
-//            cardList = presenter.getGroups();
-//            if(cardList==null) cardList = new ArrayList<>();
-//            recyclerAdapter.resetCardList(cardList);
-//        }
-//        else {
-//            Toast.makeText(getContext(), "获得文件列表失败", Toast.LENGTH_SHORT).show();
-//            cardList = new ArrayList<>();
-//            recyclerAdapter.resetCardList(cardList);
-//        }
-//    }
+    @Override
+    public void onRecommend(List<FileBean> list) {
+        if(list!=null){
+            cardList = list;
+            recyclerAdapter.resetCardList(cardList);
+        }
+        else {
+            Toast.makeText(getContext(), "获得列表失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<>();
+            recyclerAdapter.resetCardList(cardList);
+        }
+    }
+
+    public static SearchPresenterImpl getPresenter(){
+        return presenter;
+    }
 }
 

@@ -13,17 +13,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.filetradeapp.Contract;
+import com.example.filetradeapp.Presenter.PasswordPresenterImpl;
 import com.example.filetradeapp.R;
 
 
 
-public class PasswordActivity extends AppCompatActivity {
+public class PasswordActivity extends AppCompatActivity implements Contract.IPasswordView {
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private Button btn_reset;//重置按钮
     private EditText phone_number,new_psw,new_psw_again;
     private String phoneNumber,psw,pswAgain;
+
+    private static PasswordPresenterImpl presenter = new PasswordPresenterImpl();
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,8 @@ public class PasswordActivity extends AppCompatActivity {
         init();
         setToolbar();
         toolbarTitle.setText("重置密码");
+
+        presenter.attachView(this);
     }
 
 
@@ -85,15 +93,7 @@ public class PasswordActivity extends AppCompatActivity {
                     Toast.makeText(PasswordActivity.this, "此手机号不存在", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Toast.makeText(PasswordActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-
-                    //重置成功后把账号传递到LoginActivity.java中
-                    Intent data = new Intent();
-                    data.putExtra("phonenumber", phoneNumber);
-                    setResult(RESULT_OK, data);
-                    //RESULT_OK为Activity系统常量，状态码为-1，
-                    // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
-                    PasswordActivity.this.finish();
+                    presenter.doPassword(phoneNumber,psw);
                 }
             }
         });
@@ -118,4 +118,20 @@ public class PasswordActivity extends AppCompatActivity {
         return has_phoneNumber;
     }
 
+    @Override
+    public void onPassword(boolean bool) {
+        if (bool) {
+            Toast.makeText(PasswordActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+            //重置成功后把账号传递到LoginActivity.java中
+            Intent data = new Intent();
+            data.putExtra("phonenumber", phoneNumber);
+            setResult(RESULT_OK, data);
+            //RESULT_OK为Activity系统常量，状态码为-1，
+            // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
+            PasswordActivity.this.finish();
+        }
+        else {
+            Toast.makeText(this, "修改失败", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

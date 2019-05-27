@@ -36,7 +36,7 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    compile 'com.zhy:flowlayout-lib:1.0.3'
+    implementation 'com.zhy:flowlayout-lib:1.0.3'
 
     implementation 'com.google.code.gson:gson:2.8.5'
 

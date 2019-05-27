@@ -1,10 +1,12 @@
 package com.example.filetradeapp.Presenter;
 
 
+import com.example.filetradeapp.Config;
 import com.example.filetradeapp.Contract;
 import com.example.filetradeapp.Model.LoginModelImpl;
 import com.example.filetradeapp.Model.RegisterModelImpl;
 import com.example.filetradeapp.Util.Bean.FileBean;
+import com.example.filetradeapp.Util.Bean.UserBean;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,13 +32,17 @@ public class RegisterPresenterImpl implements Contract.IRegisterPresenter{
         model.doRegister(username, password,phone)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<FileBean>>() {
+                .subscribe(new Observer<Response<UserBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(Response<FileBean> result) {
+                    public void onNext(Response<UserBean> result) {
+                        UserBean userBean = result.body();
+                        Config.userId = userBean.getUser_id();
+                        Config.username = userBean.getUser_name();
+                        Config.credit = userBean.getCredit();
                         view.onRegister(result.isSuccessful());
                     }
 
