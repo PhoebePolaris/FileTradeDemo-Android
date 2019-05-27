@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.filetradeapp.Config;
 import com.example.filetradeapp.Contract;
 import com.example.filetradeapp.Presenter.RegisterPresenterImpl;
 import com.example.filetradeapp.R;
@@ -25,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
     private Toolbar toolbar;
     private TextView toolbarTitle;
 
-    private RegisterPresenterImpl presenter;
+    private static RegisterPresenterImpl presenter = new RegisterPresenterImpl();
     //private TextView tv_main_title;//标题
     //private TextView tv_back;//返回按钮
     private Button btn_register;//注册按钮
@@ -46,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
         setToolbar();
         toolbarTitle.setText("注册账号");
 
-        presenter = new RegisterPresenterImpl();
         presenter.attachView(this);
     }
 
@@ -115,6 +115,9 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
                     Toast.makeText(RegisterActivity.this, "此手机号已经存在", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
+                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                    RegisterActivity.this.finish();
+                    startActivity(new Intent(RegisterActivity.this, LabelActivity.class));
                     presenter.doRegister(userName, psw, phoneNumber);
                 }
             }
@@ -146,15 +149,13 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
     }
 
     @Override
-    public void onRegister(RegisterBean.ResResultBean resResultBean) {
+    public void onRegister(boolean bool) {
         //这里写处理注册结果的逻辑
         //具体参考RegisterBean文件
-        if (resResultBean.isIsSuccess()) {
+        if (bool) {
             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
-            String userId = resResultBean.getCurData().getUserId(),
-                phoneNumber = resResultBean.getCurData().getPhone();
             Intent intent = new Intent();
-            intent.putExtra("username", userName);
+            intent.putExtra("phone", phoneNumber);
             setResult(1, intent);
             finish();
         }

@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
     private static Toolbar toolbar;
     private static TextView toolbarTitle;
 
-    private String phonenum, psw, spPsw;//获取的手机号，密码，加密密码
+    private String phonenum, psw;
 
     private static LoginPresenterImpl presenter = new LoginPresenterImpl();
 
@@ -41,6 +41,9 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);//设置此界面为竖屏
         setToolbar();
+        toolbarTitle.setText("登录");
+
+        ServiceManager.init();
 
         init();
         presenter.attachView(this);
@@ -69,8 +72,8 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
             @Override
             public void onClick(View v) {
                 //为了跳转到注册界面，并实现注册功能
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivityForResult(intent, 1);
+                LoginActivity.this.finish();
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
@@ -96,9 +99,11 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
                  } else if (TextUtils.isEmpty(psw)) {
                      Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                      return;
-                     // md5Psw.equals(); 判断，输入的密码加密后，是否与保存在SharedPreferences中一致
                  }
                  presenter.doLogin(phonenum, psw);
+                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                 LoginActivity.this.finish();
+                 startActivity(new Intent(LoginActivity.this, MenuActivity.class));
              }
          });
     }
@@ -114,30 +119,7 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
         return sp.getString(phonenum, "");
     }
 
-    /**
-     * 保存登录状态和登录用户名到SharedPreferences中
-     */
-    private void saveLoginStatus(boolean status, String phonenum) {
-        //saveLoginStatus(true, userName);
-        //loginInfo表示文件名  SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
-        //获取编辑器
-        SharedPreferences.Editor editor = sp.edit();
-        //存入boolean类型的登录状态
-        editor.putBoolean("isLogin", status);
-        //存入登录状态时的用户名
-        editor.putString("loginUserName", phonenum);
-        //提交修改
-        editor.commit();
-    }
 
-    /**
-     * 注册成功的数据返回至此
-     *
-     * @param requestCode 请求码
-     * @param resultCode  结果码
-     * @param data        数据
-     */
     @Override
     //显示数据， onActivityResult
     //startActivityForResult(intent, 1); 从注册界面中获取数据
@@ -149,45 +131,27 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
         if (data != null) {
             //是获取注册界面回传过来的手机号
             //getExtra().getString("***");
-            String username = data.getStringExtra("username");
-            if (!TextUtils.isEmpty(username)) {
+            String phone = data.getStringExtra("username");
+            if (!TextUtils.isEmpty(phone)) {
                 //设置用户名到 et_phonenum 控件
-                et_phonenum.setText(username);
+                et_phonenum.setText(phone);
                 //et_phonenum控件的setSelection()方法来设置光标位置
-                et_phonenum.setSelection(username.length());
+                et_phonenum.setSelection(phone.length());
             }
         }
     }
 
     @Override
-    public void onLogin(LoginBean.ResResultBean bean) {
-         if (bean.isIsSuccess()) {
-             //一致登录成功
+    public void onLogin(boolean bool) {
+         if (bool) {
              Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-             //保存登录状态，在界面保存登录的用户名 定义个方法 saveLoginStatus boolean 状态 , userName 用户名;
-             saveLoginStatus(true, phonenum);
-             //登录成功后关闭此页面进入主页
-             Intent data = new Intent();
-             //datad.putExtra( ); name , value ;
-             data.putExtra("isLogin", true);
-             //RESULT_OK为Activity系统常量，状态码为-1
-             // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
-             setResult(RESULT_OK, data);
-             Config.username = bean.getCurData().getUsername();
-             Config.userId = bean.getCurData().getUserId();
-             Config.phone = bean.getCurData().getPhone();
-             //销毁登录界面
              LoginActivity.this.finish();
-             //跳转到主界面，登录成功的状态传递到 MainActivity 中
-             startActivity(new Intent(LoginActivity.this, MenuActivity.class));
+             startActivity(new Intent(LoginActivity.this, LabelActivity.class));
          }
          else {
-             String message = bean.getMessage();
-             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+             Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
          }
     }
-
-
 }
 
 

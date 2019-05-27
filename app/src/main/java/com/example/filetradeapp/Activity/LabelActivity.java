@@ -7,10 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.filetradeapp.Activity.Fragment.NavHomeFragment;
+import com.example.filetradeapp.Config;
+import com.example.filetradeapp.Contract;
 import com.example.filetradeapp.R;
+import com.example.filetradeapp.Util.IO.ServiceManager;
+import com.google.gson.JsonObject;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -18,7 +21,10 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class labelActivity extends AppCompatActivity {
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
+public class LabelActivity extends AppCompatActivity{
     private TagFlowLayout flowLayout0;
     private TagFlowLayout flowLayout1;
     private TagFlowLayout flowLayout2;
@@ -69,7 +75,7 @@ public class labelActivity extends AppCompatActivity {
         flowLayout0.setAdapter(mAdapterFive = new TagAdapter<String>(item0) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
-                tv0 = new TextView(labelActivity.this);
+                tv0 = new TextView(LabelActivity.this);
                 tv0.setTextSize(13);
                 tv0.setPadding(34,18,34,18);
                 tv0.setBackgroundResource(R.drawable.tag0);
@@ -80,7 +86,7 @@ public class labelActivity extends AppCompatActivity {
         flowLayout1.setAdapter(mAdapterFive = new TagAdapter<String>(item1) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
-                tv1 = new TextView(labelActivity.this);
+                tv1 = new TextView(LabelActivity.this);
                 tv1.setTextSize(13);
                 tv1.setPadding(34,18,34,18);
                 tv1.setBackgroundResource(R.drawable.tag1);
@@ -91,7 +97,7 @@ public class labelActivity extends AppCompatActivity {
         flowLayout2.setAdapter(mAdapterFive = new TagAdapter<String>(item2) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
-                tv2 = new TextView(labelActivity.this);
+                tv2 = new TextView(LabelActivity.this);
                 tv2.setTextSize(13);
                 tv2.setPadding(34,18,34,18);
                 tv2.setBackgroundResource(R.drawable.tag2);
@@ -102,7 +108,7 @@ public class labelActivity extends AppCompatActivity {
         flowLayout3.setAdapter(mAdapterFive = new TagAdapter<String>(item3) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
-                tv3 = new TextView(labelActivity.this);
+                tv3 = new TextView(LabelActivity.this);
                 tv3.setTextSize(13);
                 tv3.setPadding(34,18,34,18);
                 tv3.setBackgroundResource(R.drawable.tag3);
@@ -146,8 +152,17 @@ public class labelActivity extends AppCompatActivity {
      btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(labelActivity.this,NavHomeFragment.class);
-                startActivity(intent);
+                JsonObject json = new JsonObject();
+                json.addProperty("user_id",Config.userId);
+                json.addProperty("label_1",tags0.toString());
+                json.addProperty("label_2",tags1.toString());
+                json.addProperty("label_3",tags2.toString());
+                json.addProperty("label_4",tags3.toString());
+                RequestBody req = RequestBody.create(MediaType.parse("application/json"),json.toString());
+                ServiceManager.getRequest().requestBuy(req);
+
+                LabelActivity.this.finish();
+                if(getIntent().getIntExtra("from",0)!=1) startActivity(new Intent(LabelActivity.this,MenuActivity.class));
             }
         });
     }

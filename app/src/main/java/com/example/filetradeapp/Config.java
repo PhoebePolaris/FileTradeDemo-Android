@@ -3,33 +3,23 @@ package com.example.filetradeapp;
 import android.content.Context;
 import android.os.Environment;
 
-import com.example.filetradeapp.Activity.Entity.FileCard;
+import com.example.filetradeapp.Util.Bean.FileBean;
+import com.example.filetradeapp.Util.Bean.File_label;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 public class Config {
-    //public static final String baseURL = "http://120.79.191.240:8089/rssbackend/api/v1/";
 
     public static String username;
     public static String userId;
-    public static String phone;
-
-    public static String uid;
-
     public static int credit;
 
-    public static String baseURL = "http://192.168.191.1:8080/";
+    public static String baseURL = "http://192.168.137.1:8080/";
 
     public static String storageURL = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).getAbsolutePath();
-
-    public static List<FileCard> getTestList(){
-        List<FileCard> list = new LinkedList<>();
-        for(int i=0;i<10;i++){
-            list.add(new FileCard("fid"+i,"fname"+i,2,"uid"+i));
-        }
-        return list;
-    }
 }

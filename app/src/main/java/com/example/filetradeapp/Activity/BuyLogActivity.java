@@ -12,21 +12,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.filetradeapp.Activity.Adapter.FileCardRecyclerAdapter;
-import com.example.filetradeapp.Activity.Entity.FileCard;
-import com.example.filetradeapp.Config;
+import com.example.filetradeapp.Contract;
+import com.example.filetradeapp.Presenter.BuyLogPresenterImpl;
 import com.example.filetradeapp.R;
+import com.example.filetradeapp.Util.Bean.FileBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SomeRecyclerActivity extends AppCompatActivity {
+public class BuyLogActivity extends AppCompatActivity implements Contract.IBuyLogView {
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private View view;
 
-    //private static GroupPresenterImpl presenter = new GroupPresenterImpl();
-    //private List<FileCard> cardList = new ArrayList<>();
-    private List<FileCard> cardList = Config.getTestList();
+    private static BuyLogPresenterImpl presenter = new BuyLogPresenterImpl();
+    private List<FileBean> cardList = new ArrayList<>();
     private FileCardRecyclerAdapter recyclerAdapter = new FileCardRecyclerAdapter(cardList);
     private RecyclerView recyclerView;
 
@@ -36,15 +36,15 @@ public class SomeRecyclerActivity extends AppCompatActivity {
         view = View.inflate(this,R.layout.activity_recycler,null);
         setContentView(view);
 
-        //presenter.attachView(this);
+        presenter.attachView(this);
 
         setToolbar();
 
-        toolbarTitle.setText("someLog");
-        //presenter.doGetUserGroups();
+        toolbarTitle.setText("已购买");
+        presenter.doBuyLog();
 
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SomeRecyclerActivity.this,LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(BuyLogActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(recyclerAdapter);
     }
 
@@ -75,22 +75,17 @@ public class SomeRecyclerActivity extends AppCompatActivity {
         return false;
     }
 
-//    public static GroupPresenterImpl getPresenter(){
-//        return presenter;
-//    }
-//
-//    @Override
-//    public void onUserGroupsRetrieved(String status) {
-//        if(status.equals("success")){
-//            cardList = presenter.getUserGroups();
-//            if(cardList==null) cardList = new ArrayList<>();
-//            recyclerAdapter.resetCardList(cardList);
-//        }
-//        else {
-//            Toast.makeText(GroupActivity.this, "获得小组失败", Toast.LENGTH_SHORT).show();
-//            cardList = new ArrayList<>();
-//            recyclerAdapter.resetCardList(cardList);
-//        }
-//    }
+    @Override
+    public void onBuyLog(List<FileBean> list) {
+        if(list!=null){
+            cardList = list;
+            recyclerAdapter.resetCardList(cardList);
+        }
+        else {
+            Toast.makeText(BuyLogActivity.this, "获得列表失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<>();
+            recyclerAdapter.resetCardList(cardList);
+        }
+    }
 }
 

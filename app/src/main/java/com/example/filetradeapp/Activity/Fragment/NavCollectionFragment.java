@@ -10,20 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.filetradeapp.Activity.Adapter.FileCardRecyclerAdapter;
-import com.example.filetradeapp.Activity.Entity.FileCard;
-import com.example.filetradeapp.Config;
+import com.example.filetradeapp.Contract;
+import com.example.filetradeapp.Presenter.CollectionPresenterImpl;
 import com.example.filetradeapp.R;
+import com.example.filetradeapp.Util.Bean.FileBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavCollectionFragment extends Fragment {
+public class NavCollectionFragment extends Fragment implements Contract.ICollectionView {
 
     private View view;
-    //private static NavMenuPresenterImpl presenter = new NavMenuPresenterImpl();
+    private static CollectionPresenterImpl presenter = new CollectionPresenterImpl();
 
-    //private List<FileCard> cardList = new ArrayList<>();
-    private List<FileCard> cardList = Config.getTestList();
+    private List<FileBean> cardList = new ArrayList<>();
     private FileCardRecyclerAdapter recyclerAdapter = new FileCardRecyclerAdapter(cardList);
     private RecyclerView recyclerView;
 
@@ -31,8 +31,8 @@ public class NavCollectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_recycler, container,false);
 
-        //presenter.attachView(this);
-        //presenter.doGetUserSources();
+        presenter.attachView(this);
+        presenter.doCollection();
 
         RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
@@ -41,21 +41,21 @@ public class NavCollectionFragment extends Fragment {
         return view;
     }
 
-    //    public static NavMenuPresenterImpl getPresenter(){
-//        return presenter;
-//    }
+    @Override
+    public void onCollection(List<FileBean> list) {
+        if(list!=null){
+            cardList = list;
+            recyclerAdapter.resetCardList(cardList);
+        }
+        else {
+            Toast.makeText(getContext(), "获得列表失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<>();
+            recyclerAdapter.resetCardList(cardList);
+        }
+    }
 
-//    @Override
-//    public void onUserSourcesRetrieved(String status) {
-//        if(status.equals("success")){
-//            List<Source> list = presenter.getSources();
-//            if(list==null) return;
-//            StaticTool.sourceCardList = list;
-//            recyclerAdapter.resetCardList(StaticTool.sourceCardList);
-//        }
-//        else {
-//            Toast.makeText(getActivity(), "获得订阅列表失败", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    public static CollectionPresenterImpl getPresenter(){
+        return presenter;
+    }
 }
 

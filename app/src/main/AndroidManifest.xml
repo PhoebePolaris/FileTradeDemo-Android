@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.filetradeapp">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,20 +15,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".Activity.MenuActivity"
-            android:label="@string/app_name">
+        <activity android:name=".Activity.MenuActivity" />
+        <activity android:name=".Activity.BuyLogActivity" />
+        <activity android:name=".Activity.LabelActivity">
+
+        </activity>
+        <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.SomeActivity" />
-        <activity android:name=".Activity.SomeRecyclerActivity" />
-        <activity android:name=".Activity.labelActivity">
-
-        </activity>
+        <activity android:name=".Activity.PasswordActivity" />
+        <activity android:name=".Activity.DetailActivity" />
+        <activity android:name=".Activity.RegisterActivity" />
+        <activity android:name=".Activity.UploadActivity" />
+        <activity android:name=".Activity.CollectionActivity" />
+        <activity android:name=".Activity.DownloadLogActivity" />
+        <activity android:name=".Activity.UploadLogActivity" />
     </application>
 
 </manifest>

@@ -28,12 +28,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/card_file_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/head_default"/>
+                android:src="@drawable/doc"/>
 
         </LinearLayout>
 

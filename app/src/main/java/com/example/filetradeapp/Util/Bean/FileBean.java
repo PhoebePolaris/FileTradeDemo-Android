@@ -1,6 +1,8 @@
 package com.example.filetradeapp.Util.Bean;
 
-public class FileBean {
+import java.io.Serializable;
+
+public class FileBean implements Serializable {
 
     private String uid;
     private String fid;
